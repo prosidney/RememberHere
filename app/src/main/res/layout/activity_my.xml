@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+<EditText android:id="@+id/edit_message"
+          android:hint="@string/edit_message"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+
+
+<Button android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="sendMessage"
+        android:text="@string/button_send" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="457dp"
+        android:id="@+id/listView"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>
