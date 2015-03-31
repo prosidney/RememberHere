@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -31,11 +32,7 @@ public class MyActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-        String[] values = getSQLData();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, values);
-
-        final ListView listview = (ListView) findViewById(R.id.listView);
-        listview.setAdapter(adapter);
+        new LongOperation().execute();
 
         scheduleJob(getApplicationContext());
     }
@@ -74,20 +71,7 @@ public class MyActivity extends ActionBarActivity{
         Intent intent = new Intent(this, DisplayMessageActivity.class);
         intent.putExtra(EXTRA_MESSAGE, message);
 
-
-
         startActivity(intent);
-    }
-
-    private String[] getSQLData(){
-        List<Establishment> establishments = Establishment.listAll(Establishment.class);
-
-        String[] values = new String[establishments.size()];
-        for (int i = 0; i < establishments.size(); i++) {
-            values[i] = establishments.get(i).getName();
-        }
-
-        return values;
     }
 
     public void scheduleJob(Context context) {
@@ -95,5 +79,34 @@ public class MyActivity extends ActionBarActivity{
         Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 1, pendingIntent);
+    }
+
+    private class LongOperation extends AsyncTask<String, Void, String[]> {
+
+        @Override
+        protected String[] doInBackground(String... params) {
+            List<Establishment> establishments = Establishment.listAll(Establishment.class);
+
+            String[] values = new String[establishments.size()];
+            for (int i = 0; i < establishments.size(); i++) {
+                values[i] = establishments.get(i).getName();
+            }
+
+            return values;
+        }
+
+        @Override
+        protected void onPostExecute(String[] results) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, results);
+
+            final ListView listview = (ListView) findViewById(R.id.listView);
+            listview.setAdapter(adapter);
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
     }
 }
