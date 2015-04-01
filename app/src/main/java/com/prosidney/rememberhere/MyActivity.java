@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -11,9 +12,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.prosidney.alarm.AlarmReceiver;
@@ -97,7 +100,19 @@ public class MyActivity extends ActionBarActivity{
 
         @Override
         protected void onPostExecute(String[] results) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, results);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, results){
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+
+                    TextView textView = (TextView) view.findViewById(android.R.id.text1);
+
+                    /*YOUR CHOICE OF COLOR*/
+                    textView.setTextColor(Color.BLACK);
+
+                    return view;
+                }
+            };
 
             final ListView listview = (ListView) findViewById(R.id.listView);
             listview.setAdapter(adapter);

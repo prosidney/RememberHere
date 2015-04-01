@@ -45,7 +45,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             //System.out.println("Your Location is - \nLat: " + latitude + "\nLong: " + longitude);
 
            try {
-                Map<String, Object> ret = apiHandler.getNearbyStore("NoFrills", 43.6928138, -79.4707626);
+                Map<String, Object> ret = apiHandler.getNearbyStore("NoFrills", latitude, longitude);
                 //System.out.println(ret.size());
             } catch (IOException e) {
                 e.printStackTrace();
